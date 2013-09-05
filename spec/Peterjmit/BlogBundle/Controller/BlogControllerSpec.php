@@ -2,18 +2,17 @@
 
 namespace spec\Peterjmit\BlogBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Doctrine\ORM\EntityRepository;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 class BlogControllerSpec extends ObjectBehavior
 {
-    function let(
-        EntityRepository $blogRepository,
-        EngineInterface $templating
-    ) {
+    /**
+     * @param \Doctrine\ORM\EntityRepository $blogRepository
+     * @param \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface $templating
+     */
+    function let($blogRepository, $templating)
+    {
         $this->beConstructedWith($blogRepository, $templating);
     }
 
@@ -22,17 +21,19 @@ class BlogControllerSpec extends ObjectBehavior
         $this->shouldHaveType('Peterjmit\BlogBundle\Controller\BlogController');
     }
 
-    function it_should_respond_to_index_action(
-        EntityRepository $blogRepository,
-        EngineInterface $templating,
-        Response $mockResponse
-    ) {
-        $blogRepository->findAll()->willReturn(array('An array', 'of blog', 'posts!'));
+    /**
+     * @param \Doctrine\ORM\EntityRepository $blogRepository
+     * @param \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface $templating
+     * @param \Symfony\Component\HttpFoundation\Response $mockResponse
+     */
+    function it_responds_to_index_action($blogRepository, $templating, $mockResponse)
+    {
+        $blogRepository->findAll()->willReturn(['An array', 'of blog', 'posts!']);
 
         $templating
             ->renderResponse(
                 'PeterjmitBlogBundle:Blog:index.html.twig',
-                array('posts' => array('An array', 'of blog', 'posts!'))
+                ['posts' => ['An array', 'of blog', 'posts!']]
             )
             ->willReturn($mockResponse)
         ;
@@ -42,11 +43,13 @@ class BlogControllerSpec extends ObjectBehavior
         $response->shouldHaveType('Symfony\Component\HttpFoundation\Response');
     }
 
-    function it_shows_a_single_blog_post(
-        EntityRepository $blogRepository,
-        EngineInterface $templating,
-        Response $response
-    ) {
+    /**
+     * @param \Doctrine\ORM\EntityRepository $blogRepository
+     * @param \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface $templating
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     */
+    function it_shows_a_single_blog_post($blogRepository, $templating, $response)
+    {
         $blogRepository->find(1)->willReturn('A blog post');
 
         $templating
@@ -60,7 +63,10 @@ class BlogControllerSpec extends ObjectBehavior
         $this->showAction(1)->shouldReturn($response);
     }
 
-    function it_throws_an_exception_if_a_blog_post_doesnt_exist(EntityRepository $blogRepository)
+    /**
+     * @param \Doctrine\ORM\EntityRepository $blogRepository
+     */
+    function it_throws_an_exception_if_a_blog_post_doesnt_exist($blogRepository)
     {
         $blogRepository->find(999)->willReturn(null);
 
