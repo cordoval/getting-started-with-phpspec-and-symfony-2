@@ -4,6 +4,7 @@ namespace spec\Peterjmit\BlogBundle\Controller;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Symfony\Component\HttpFoundation\Response;
 
 class BlogControllerSpec extends ObjectBehavior
 {
@@ -24,10 +25,11 @@ class BlogControllerSpec extends ObjectBehavior
     /**
      * @param \Doctrine\ORM\EntityRepository $blogRepository
      * @param \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface $templating
-     * @param \Symfony\Component\HttpFoundation\Response $mockResponse
      */
-    function it_responds_to_index_action($blogRepository, $templating, $mockResponse)
+    function it_responds_to_index_action($blogRepository, $templating)
     {
+        $response = new Response();
+
         $blogRepository->findAll()->willReturn(['An array', 'of blog', 'posts!']);
 
         $templating
@@ -35,7 +37,7 @@ class BlogControllerSpec extends ObjectBehavior
                 'PeterjmitBlogBundle:Blog:index.html.twig',
                 ['posts' => ['An array', 'of blog', 'posts!']]
             )
-            ->willReturn($mockResponse)
+            ->willReturn($response)
         ;
 
         $response = $this->indexAction();
@@ -46,10 +48,11 @@ class BlogControllerSpec extends ObjectBehavior
     /**
      * @param \Doctrine\ORM\EntityRepository $blogRepository
      * @param \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface $templating
-     * @param \Symfony\Component\HttpFoundation\Response $response
      */
-    function it_shows_a_single_blog_post($blogRepository, $templating, $response)
+    function it_shows_a_single_blog_post($blogRepository, $templating)
     {
+        $response = new Response();
+
         $blogRepository->find(1)->willReturn('A blog post');
 
         $templating
