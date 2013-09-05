@@ -1,7 +1,13 @@
-parameters:
-#    peterjmit_blog.example.class: Peterjmit\BlogBundle\Example
-
 services:
-#    peterjmit_blog.example:
-#        class: %peterjmit_blog.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    peterjmit_blog.controller.blog:
+        class: Peterjmit\BlogBundle\Controller\BlogController
+        arguments:
+            - @peterjmit_blog.repository.blog
+            - @templating
+
+    peterjmit_blog.repository.blog:
+        class: Peterjmit\BlogBundle\Repository\BlogRepository
+        arguments:
+            - @entity_manager
+
+
