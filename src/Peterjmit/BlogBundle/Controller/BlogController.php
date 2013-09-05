@@ -21,9 +21,9 @@ class BlogController
     {
         $posts = $this->blogRepository->findAll();
 
-        return $this->templating->renderResponse('PeterjmitBlogBundle:Blog:index.html.twig', array(
+        return $this->templating->renderResponse('PeterjmitBlogBundle:Blog:index.html.twig', [
             'posts' => $posts
-        ));
+        ]);
     }
 
     public function showAction($id)
@@ -34,8 +34,8 @@ class BlogController
             throw new NotFoundHttpException(sprintf('Blog post %s was not found', $id));
         }
 
-        return $this->templating->renderResponse('PeterjmitBlogBundle:Blog:show.html.twig', array(
+        return $this->templating->renderResponse('PeterjmitBlogBundle:Blog:show.html.twig', [
             'post' => $post
-        ));
+        ]);
     }
 }
